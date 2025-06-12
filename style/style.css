@@ -1,0 +1,471 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Outfit", sans-serif;
+}
+body {
+  display: flex;
+  overflow-y: hidden;
+}
+.dashboard {
+  width: 20%;
+  height: 735px;
+  background: linear-gradient(to right, #ffffff, #d0f0ff77);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid #93ddff;
+}
+.profile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 6px;
+  border-top: 1px solid rgba(128, 128, 128, 0.151);
+}
+.name {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  color: rgb(59, 59, 59);
+
+}
+
+.username {
+  font-size: 14px;
+  color: rgb(55, 175, 255);
+  margin-top: -5px;
+}
+#logOutBtn {
+  color: red;
+  font-size: 22px;
+}
+.profilImage {
+  width: 40px;
+  border-radius: 1000px;
+  padding: 2px;
+  border: 2px solid #01aeff;
+}
+.header {
+  display: flex;
+  flex-direction: column;
+}
+.main {
+  width: 100%;
+  background: linear-gradient(to right, #ffffff, #d0f0ff);
+}
+.tasks {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 2px;
+  gap: 12px;
+  text-align: center;
+  overflow: auto;
+  -ms-overflow-style: none;
+}
+
+.tasks:hover .work {
+    transition: 0.3s ease;
+    filter: blur(1px);
+    transform: scale(0.96);
+  }
+
+  .tasks .work:hover {
+    filter: none;
+    transform: scale(0.98);
+    z-index: 10;
+    position: relative;
+    background: #f4f4f4;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+.tasks::-webkit-scrollbar {
+  display: none;
+}
+.work {
+
+
+  padding: 7px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border: 1px solid #00000013;
+  cursor: grab;
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+.work:active {
+  cursor: grabbing;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+.navbar {
+  width: 100%;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: transparent;
+  border-bottom: 1px solid #59caff52;
+}
+.results {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 20px;
+  background-color: transparent;
+  border-bottom: 1px solid #59caff52;
+}
+#taskBtn {
+  background-color: #01a2ff;
+  padding: 10px 10px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  cursor: pointer;
+  transition: ease 0.3s ;
+  i {
+    font-size: 17px;
+  }
+}
+#taskBtn:hover{
+  background-color:  #0184ff;
+
+}
+.team_date {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+}
+.members {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: rgb(65, 65, 65);
+
+  i {
+    color: #01a2ff;
+    font-size: 20px;
+  }
+}
+.date {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: rgb(65, 65, 65);
+
+  i {
+    color: #01a2ff;
+
+    font-size: 18px;
+  }
+}
+.search_bell_dark {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  i {
+    font-weight: 500;
+    font-size: 20px;
+  }
+}
+.progress {
+  display: flex;
+  flex-direction: column;
+}
+.progress h6 {
+  font-size: 16px;
+  font-weight: 600;
+}
+.logo {
+  width: 130px;
+  margin-bottom: 10px;
+}
+.Works {
+  display: flex;
+  width: 100%;
+  height: 85%;
+  gap: 30px;
+  padding: 30px 20px;
+}
+.practice,
+.completed {
+  width: 50%;
+  background-color: white;
+  border: 1px solid #64ceff54;
+  padding: 10px;
+  border-radius: 7px;
+  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.137);
+
+}
+.practice h2,
+.completed h2{
+    padding: 0 8px 8px 8px;
+    color: rgb(87, 87, 87);
+}
+.completed h4{
+    padding: 10px 10px 10px 0;
+    color: rgb(87, 87, 87);
+
+}
+
+.practice_work,
+.done {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 7px;
+  height: 467px;
+  overflow-y: scroll;
+  padding-right: 10px;
+  background-color: #93ddff57;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.practice_work::-webkit-scrollbar,
+.done::-webkit-scrollbar {
+  display: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* From Uiverse.io by vinodjangid07 */
+.InputContainer {
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    padding-left: 15px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.075);
+  }
+
+  .input {
+    width: 170px;
+    height: 100%;
+    border: none;
+    outline: none;
+    font-size: 0.9em;
+    caret-color: #01aeff;
+  }
+
+  .labelforsearch {
+    cursor: text;
+    padding: 0px 12px;
+  }
+
+  .searchIcon {
+    width: 13px;
+  }
+
+  .border {
+    height: 40%;
+    width: 1.3px;
+    background-color: rgb(223, 223, 223);
+  }
+
+  .micIcon {
+    width: 12px;
+  }
+
+  .micButton {
+    padding: 0px 15px 0px 12px;
+    border: none;
+    background-color: transparent;
+    height: 40px;
+    cursor: pointer;
+    transition-duration: .3s;
+  }
+
+  .searchIcon path {
+    fill: rgb(114, 114, 114);
+  }
+
+  .micIcon path {
+    fill:#01aeff;
+  }
+
+  .micButton:hover {
+    background-color: #aae4ff34;
+    transition-duration: .3s;
+  }
+
+
+  /* From Uiverse.io by catraco */
+/*------ Settings ------*/
+.notifcation{
+    --color: #01a2ff;
+    --size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    font-size: var(--size);
+    user-select: none;
+    fill: var(--color);
+  }
+
+  .notifcation .bell-regular {
+    position: absolute;
+    animation: keyframes-fill .5s;
+  }
+
+  .notifcation .bell-solid {
+    position: absolute;
+    display: none;
+    animation: keyframes-fill .5s;
+  }
+
+  /* ------ On check event ------ */
+  .notifcation input:checked ~ .bell-regular {
+    display: none;
+  }
+
+  .notifcation input:checked ~ .bell-solid {
+    display: block;
+  }
+
+  /* ------ Hide the default checkbox ------ */
+  .notifcation input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  /* ------ Animation ------ */
+  @keyframes keyframes-fill {
+    0% {
+      opacity: 0;
+    }
+
+    25% {
+      transform: rotate(25deg);
+    }
+
+    50% {
+      transform: rotate(-20deg) scale(1.2);
+    }
+
+    75% {
+      transform: rotate(15deg);
+    }
+  }
+
+
+
+
+
+  /* From Uiverse.io by Type-Delta */
+/* a clone from joshwcomeau.com
+ * but this version runs on pure CSS
+ */
+
+.themeToggle {
+    color: #01a2ff;
+    width: 1.5em;
+
+  }
+
+  .st-sunMoonThemeToggleBtn {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .st-sunMoonThemeToggleBtn .themeToggleInput {
+    opacity: 0;
+    width: 100%;
+    aspect-ratio: 1;
+  }
+
+  .st-sunMoonThemeToggleBtn svg {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.4s ease;
+    transform: rotate(40deg);
+  }
+
+  .st-sunMoonThemeToggleBtn svg .sunMoon {
+    transform-origin: center center;
+    transition: inherit;
+    transform: scale(1);
+  }
+
+  .st-sunMoonThemeToggleBtn svg .sunRay {
+    transform-origin: center center;
+    transform: scale(0);
+  }
+
+  .st-sunMoonThemeToggleBtn svg mask > circle {
+    transition: transform 0.64s cubic-bezier(0.41, 0.64, 0.32, 1.575);
+    transform: translate(0px, 0px);
+  }
+
+  .st-sunMoonThemeToggleBtn svg .sunRay2 {
+    animation-delay: 0.05s !important;
+  }
+  .st-sunMoonThemeToggleBtn svg .sunRay3 {
+    animation-delay: 0.1s !important;
+  }
+  .st-sunMoonThemeToggleBtn svg .sunRay4 {
+    animation-delay: 0.17s !important;
+  }
+  .st-sunMoonThemeToggleBtn svg .sunRay5 {
+    animation-delay: 0.25s !important;
+  }
+  .st-sunMoonThemeToggleBtn svg .sunRay5 {
+    animation-delay: 0.29s !important;
+  }
+
+  .st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg {
+    transform: rotate(90deg);
+  }
+  .st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg mask > circle {
+    transform: translate(16px, -3px);
+  }
+  .st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg .sunMoon {
+    transform: scale(0.55);
+  }
+  .st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg .sunRay {
+    animation: showRay1832 0.4s ease 0s 1 forwards;
+  }
+
+  @keyframes showRay1832 {
+    0% {
+      transform: scale(0);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
