@@ -1,0 +1,8 @@
+body {
+  display: flex;
+  background: linear-gradient(to right, #ffffff, #d0f0ff);
+}
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+}
