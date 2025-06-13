@@ -285,3 +285,18 @@ function dragDrop(e) {
   this.appendChild(card)
   this.classList.remove("over");
 }
+
+
+// ============================= ***** Dark Mode ***** ======================================
+const themeToggle = document.getElementById('themeToggle');
+
+const savedTheme = localStorage.getItem('theme') ||
+                  (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+document.documentElement.setAttribute('data-theme', savedTheme);
+themeToggle.checked = savedTheme === 'dark';
+
+themeToggle.addEventListener('change', function() {
+  const newTheme = this.checked ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
+});

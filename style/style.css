@@ -1,4 +1,38 @@
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
+
+:root {
+  --color-white: #ffffff;
+  --color-light-cyan: #d0f0ff;
+  --color-light-cyan-transparent: #d0f0ff77;
+  --color-border-blue: #93ddff;
+  --color-soft-blue: #01a2ff;
+  --color-hover-blue: #0184ff;
+  --color-dark-gray: rgb(59, 59, 59);
+  --color-light-gray: rgb(87, 87, 87);
+  --color-light-text: rgb(65, 65, 65);
+  --color-blue-text: rgb(55, 175, 255);
+  --color-red: red;
+  --color-dashed-bg: #9de0ff;
+  --color-dashed-border: #0184ff;
+  --color-card-shadow: rgba(0, 0, 0, 0.3);
+  --color-card-shadow-hover: rgba(0, 0, 0, 0.2);
+  --color-card-hover: #f4f4f4;
+  --color-list-bg: #93ddff57;
+  --color-border-light: #64ceff54;
+  --color-border-thin: #00000013;
+  --color-border-soft: #59caff52;
+
+  --radius-small: 5px;
+  --radius-medium: 7px;
+  --radius-full: 1000px;
+
+  --shadow-small: 0 2px 4px var(--color-card-shadow);
+  --shadow-medium: 0 3px 7px rgba(0, 0, 0, 0.137);
+  --shadow-hover: 0 4px 8px var(--color-card-shadow-hover);
+
+  --transition: 0.3s ease;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -17,7 +51,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-right: 1px solid #93ddff;
+  border-right: 1px solid var(--color-border-blue);
 }
 .profile {
   display: flex;
@@ -31,20 +65,19 @@ body {
   justify-content: center;
   align-items: center;
   gap: 10px;
-  color: rgb(59, 59, 59);
-
+  color: var(--color-dark-gray);
 }
-.list.over{
-  background-color: #9de0ff;
-  border: 1px dashed #0184ff;
+.list.over {
+  background-color: var(--color-light-cyan);
+  border: 1px dashed var(--color-hover-blue);
 }
 .username {
   font-size: 14px;
-  color: rgb(55, 175, 255);
+  color: var(--color-blue-text);
   margin-top: -5px;
 }
 #logOutBtn {
-  color: red;
+  color: var(--color-red);
   font-size: 22px;
   cursor: pointer;
 }
@@ -68,45 +101,41 @@ body {
   position: relative;
   padding: 2px;
   gap: 12px;
-  text-align: center;
+  /* text-align: center; */
   overflow: auto;
   -ms-overflow-style: none;
 }
 
 #list1:hover .card {
-    transition: 0.3s ease;
-    filter: blur(1px);
-    transform: scale(0.96);
-  }
+  transition: var(--transition);
+  filter: blur(1px);
+  transform: scale(0.96);
+}
 
-  #list1 .card:hover {
-    filter: none;
-    transform: scale(0.98);
-    z-index: 10;
-    position: relative;
-    background: #f4f4f4;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
+#list1 .card:hover {
+  filter: none;
+  transform: scale(0.98);
+  z-index: 10;
+  position: relative;
+  background: var(--color-card-hover);
+  box-shadow: 0 4px 8px var(--shadow-hover);
+}
 #list1::-webkit-scrollbar {
   display: none;
 }
 .card {
-
-
   padding: 7px;
-  background-color: white;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  border: 1px solid #00000013;
+  background-color: var(--color-white);
+  border-radius: var(--radius-small);
+  box-shadow: 0 2px 4px var(--color-card-shadow);
+  border: 1px solid var(--color-border-thin);
   cursor: grab;
-  transition:
-    background-color 0.3s ease,
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+  transition: background-color var(--transition), transform var(--transition),
+    box-shadow var(--transition);
 }
 .card:active {
   cursor: grabbing;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 8px var(--shadow-hover);
 }
 .navbar {
   width: 100%;
@@ -115,7 +144,7 @@ body {
   justify-content: space-between;
   align-items: center;
   background-color: transparent;
-  border-bottom: 1px solid #59caff52;
+  border-bottom: 1px solid var(--color-border-soft);
 }
 .results {
   width: 100%;
@@ -124,27 +153,26 @@ body {
   align-items: center;
   padding: 6px 20px;
   background-color: transparent;
-  border-bottom: 1px solid #59caff52;
+  border-bottom: 1px solid var(--color-border-soft);
 }
 #taskBtn {
   background-color: #01a2ff;
   padding: 10px 10px;
   border: none;
-  border-radius: 5px;
-  color: white;
+  border-radius: var(--radius-small);
+  color: var(--color-white);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 7px;
   cursor: pointer;
-  transition: ease 0.3s ;
+  transition: var(--transition);
   i {
     font-size: 17px;
   }
 }
-#taskBtn:hover{
-  background-color:  #0184ff;
-
+#taskBtn:hover {
+  background-color: var(--color-dashed-border);
 }
 .team_date {
   display: flex;
@@ -156,7 +184,7 @@ body {
   display: flex;
   align-items: center;
   gap: 7px;
-  color: rgb(65, 65, 65);
+  color: var(--color-light-text);
 
   i {
     color: #01a2ff;
@@ -167,7 +195,7 @@ body {
   display: flex;
   align-items: center;
   gap: 7px;
-  color: rgb(65, 65, 65);
+  color: var(--color-light-text);
 
   i {
     color: #01a2ff;
@@ -206,22 +234,20 @@ body {
 .practice,
 .completed {
   width: 50%;
-  background-color: white;
-  border: 1px solid #64ceff54;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border-light);
   padding: 10px;
-  border-radius: 7px;
-  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.137);
-
+  border-radius: var(--radius-medium);
+  box-shadow: 0 3px 7px var(--shadow-medium);
 }
 .practice h2,
-.completed h2{
-    padding: 0 8px 8px 8px;
-    color: rgb(87, 87, 87);
+.completed h2 {
+  padding: 0 8px 8px 8px;
+  color: var(--color-light-gray);
 }
-.completed h4{
-    padding: 10px 10px 10px 0;
-    color: rgb(87, 87, 87);
-
+.completed h4 {
+  padding: 10px 10px 10px 0;
+  color: var(--color-light-gray);
 }
 
 #list2,
@@ -230,11 +256,11 @@ body {
   flex-direction: column;
   gap: 8px;
   padding: 10px;
-  border-radius: 7px;
+  border-radius: var(--radius-medium);
   height: 467px;
   overflow-y: scroll;
   padding-right: 10px;
-  background-color: #93ddff57;
+  background-color: var(--color-light-cyan-transparent);
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -244,225 +270,304 @@ body {
   display: none;
 }
 
+/*==================================***** UIVERSE.io Search Container style ******==========================================*/
 
-
-
-
-
-
-/* From Uiverse.io by vinodjangid07 */
 .InputContainer {
-    height: 35px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgb(255, 255, 255);
-    border-radius: 10px;
-    overflow: hidden;
-    cursor: pointer;
-    padding-left: 15px;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.075);
-  }
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  padding-left: 15px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.075);
+}
 
-  .input {
-    width: 170px;
-    height: 100%;
-    border: none;
-    outline: none;
-    font-size: 0.9em;
-    caret-color: #01aeff;
-  }
+.input {
+  width: 170px;
+  height: 100%;
+  border: none;
+  outline: none;
+  font-size: 0.9em;
+  caret-color: #01aeff;
+}
 
-  .labelforsearch {
-    cursor: text;
-    padding: 0px 12px;
-  }
+.labelforsearch {
+  cursor: text;
+  padding: 0px 12px;
+}
 
-  .searchIcon {
-    width: 13px;
-  }
+.searchIcon {
+  width: 13px;
+}
 
-  .border {
-    height: 40%;
-    width: 1.3px;
-    background-color: rgb(223, 223, 223);
-  }
+.border {
+  height: 40%;
+  width: 1.3px;
+  background-color: rgb(223, 223, 223);
+}
 
-  .micIcon {
-    width: 12px;
-  }
+.micIcon {
+  width: 12px;
+}
 
-  .micButton {
-    padding: 0px 15px 0px 12px;
-    border: none;
-    background-color: transparent;
-    height: 40px;
-    cursor: pointer;
-    transition-duration: .3s;
-  }
+.micButton {
+  padding: 0px 15px 0px 12px;
+  border: none;
+  background-color: transparent;
+  height: 40px;
+  cursor: pointer;
+  transition-duration: 0.3s;
+}
 
-  .searchIcon path {
-    fill: rgb(114, 114, 114);
-  }
+.searchIcon path {
+  fill: rgb(114, 114, 114);
+}
 
-  .micIcon path {
-    fill:#01aeff;
-  }
+.micIcon path {
+  fill: #01aeff;
+}
 
-  .micButton:hover {
-    background-color: #aae4ff34;
-    transition-duration: .3s;
-  }
+.micButton:hover {
+  background-color: #aae4ff34;
+  transition-duration: 0.3s;
+}
 
+/*==================================***** UIVERSE.io notifcation style ******==========================================*/
 
-  /* From Uiverse.io by catraco */
-/*------ Settings ------*/
-.notifcation{
-    --color: #01a2ff;
-    --size: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    cursor: pointer;
-    font-size: var(--size);
-    user-select: none;
-    fill: var(--color);
-  }
+.notifcation {
+  --color: #01a2ff;
+  --size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  font-size: var(--size);
+  user-select: none;
+  fill: var(--color);
+}
 
-  .notifcation .bell-regular {
-    position: absolute;
-    animation: keyframes-fill .5s;
-  }
+.notifcation .bell-regular {
+  position: absolute;
+  animation: keyframes-fill 0.5s;
+}
 
-  .notifcation .bell-solid {
-    position: absolute;
-    display: none;
-    animation: keyframes-fill .5s;
-  }
+.notifcation .bell-solid {
+  position: absolute;
+  display: none;
+  animation: keyframes-fill 0.5s;
+}
 
-  /* ------ On check event ------ */
-  .notifcation input:checked ~ .bell-regular {
-    display: none;
-  }
+.notifcation input:checked ~ .bell-regular {
+  display: none;
+}
 
-  .notifcation input:checked ~ .bell-solid {
-    display: block;
-  }
+.notifcation input:checked ~ .bell-solid {
+  display: block;
+}
 
-  /* ------ Hide the default checkbox ------ */
-  .notifcation input {
-    position: absolute;
+.notifcation input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+@keyframes keyframes-fill {
+  0% {
     opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
   }
 
-  /* ------ Animation ------ */
-  @keyframes keyframes-fill {
-    0% {
-      opacity: 0;
-    }
-
-    25% {
-      transform: rotate(25deg);
-    }
-
-    50% {
-      transform: rotate(-20deg) scale(1.2);
-    }
-
-    75% {
-      transform: rotate(15deg);
-    }
+  25% {
+    transform: rotate(25deg);
   }
 
+  50% {
+    transform: rotate(-20deg) scale(1.2);
+  }
 
+  75% {
+    transform: rotate(15deg);
+  }
+}
 
-
-
-  /* From Uiverse.io by Type-Delta */
-/* a clone from joshwcomeau.com
- * but this version runs on pure CSS
- */
+/*==================================***** UIVERSE.io Dark mode toggle style ******==========================================*/
 
 .themeToggle {
-    color: #01a2ff;
-    width: 1.5em;
+  color: #01a2ff;
+  width: 1.5em;
+}
 
-  }
+.st-sunMoonThemeToggleBtn {
+  position: relative;
+  cursor: pointer;
+}
 
-  .st-sunMoonThemeToggleBtn {
-    position: relative;
-    cursor: pointer;
-  }
+.st-sunMoonThemeToggleBtn .themeToggleInput {
+  opacity: 0;
+  width: 100%;
+  aspect-ratio: 1;
+}
 
-  .st-sunMoonThemeToggleBtn .themeToggleInput {
-    opacity: 0;
-    width: 100%;
-    aspect-ratio: 1;
-  }
+.st-sunMoonThemeToggleBtn svg {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.4s ease;
+  transform: rotate(40deg);
+}
 
-  .st-sunMoonThemeToggleBtn svg {
-    position: absolute;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.4s ease;
-    transform: rotate(40deg);
-  }
+.st-sunMoonThemeToggleBtn svg .sunMoon {
+  transform-origin: center center;
+  transition: inherit;
+  transform: scale(1);
+}
 
-  .st-sunMoonThemeToggleBtn svg .sunMoon {
-    transform-origin: center center;
-    transition: inherit;
-    transform: scale(1);
-  }
+.st-sunMoonThemeToggleBtn svg .sunRay {
+  transform-origin: center center;
+  transform: scale(0);
+}
 
-  .st-sunMoonThemeToggleBtn svg .sunRay {
-    transform-origin: center center;
+.st-sunMoonThemeToggleBtn svg mask > circle {
+  transition: transform 0.64s cubic-bezier(0.41, 0.64, 0.32, 1.575);
+  transform: translate(0px, 0px);
+}
+
+.st-sunMoonThemeToggleBtn svg .sunRay2 {
+  animation-delay: 0.05s !important;
+}
+.st-sunMoonThemeToggleBtn svg .sunRay3 {
+  animation-delay: 0.1s !important;
+}
+.st-sunMoonThemeToggleBtn svg .sunRay4 {
+  animation-delay: 0.17s !important;
+}
+.st-sunMoonThemeToggleBtn svg .sunRay5 {
+  animation-delay: 0.25s !important;
+}
+.st-sunMoonThemeToggleBtn svg .sunRay5 {
+  animation-delay: 0.29s !important;
+}
+
+.st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg {
+  transform: rotate(90deg);
+}
+.st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg mask > circle {
+  transform: translate(16px, -3px);
+}
+.st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg .sunMoon {
+  transform: scale(0.55);
+}
+.st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg .sunRay {
+  animation: showRay1832 0.4s ease 0s 1 forwards;
+}
+
+@keyframes showRay1832 {
+  0% {
     transform: scale(0);
   }
+  100% {
+    transform: scale(1);
+  }
+}
 
-  .st-sunMoonThemeToggleBtn svg mask > circle {
-    transition: transform 0.64s cubic-bezier(0.41, 0.64, 0.32, 1.575);
-    transform: translate(0px, 0px);
-  }
+/*==================================***** Dark Mode style ******==========================================*/
+:root {
+  --primary-bg: #ffffff;
+  --secondary-bg: #d0f0ff;
+  --sidebar-bg: linear-gradient(to right, #ffffff, #d0f0ff77);
+  --card-bg: #ffffff;
+  --text-color: #333333;
+  --border-color: #93ddff;
+  --accent-color: #01a2ff;
+  --shadow-color: rgba(0, 0, 0, 0.137);
+  --hover-bg: #f4f4f4;
+  --scroll-bg: #93ddff57;
+}
 
-  .st-sunMoonThemeToggleBtn svg .sunRay2 {
-    animation-delay: 0.05s !important;
-  }
-  .st-sunMoonThemeToggleBtn svg .sunRay3 {
-    animation-delay: 0.1s !important;
-  }
-  .st-sunMoonThemeToggleBtn svg .sunRay4 {
-    animation-delay: 0.17s !important;
-  }
-  .st-sunMoonThemeToggleBtn svg .sunRay5 {
-    animation-delay: 0.25s !important;
-  }
-  .st-sunMoonThemeToggleBtn svg .sunRay5 {
-    animation-delay: 0.29s !important;
-  }
+[data-theme="dark"] {
+  --primary-bg: #121212;
+  --secondary-bg: linear-gradient(to right, #0f1729, #213859);
+  --sidebar-bg: linear-gradient(to right, #0f1729, #213859);
+  --card-bg: #1e293b;
+  --text-color: #e0e0e0;
+  --border-color: #0ea3e846;
+  --accent-color: #4d9eff;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --hover-bg: #324154;
+  --scroll-bg: #324154;
+}
 
-  .st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg {
-    transform: rotate(90deg);
-  }
-  .st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg mask > circle {
-    transform: translate(16px, -3px);
-  }
-  .st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg .sunMoon {
-    transform: scale(0.55);
-  }
-  .st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg .sunRay {
-    animation: showRay1832 0.4s ease 0s 1 forwards;
-  }
+body {
+  background: var(--primary-bg);
+  color: var(--text-color);
+}
 
-  @keyframes showRay1832 {
-    0% {
-      transform: scale(0);
-    }
-    100% {
-      transform: scale(1);
-    }
-  }
+.dashboard {
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border-color);
+}
+
+.main {
+  background: var(--secondary-bg);
+}
+
+.card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+#list1 .card:hover {
+  background: var(--hover-bg);
+  box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+.navbar,
+.results {
+  border-bottom: 1px solid var(--border-color);
+}
+
+#taskBtn {
+  background-color: var(--accent-color);
+}
+
+#list2,
+#list3 {
+  background-color: var(--scroll-bg);
+}
+
+.name {
+  color: var(--text-color);
+}
+
+.practice,
+.completed {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 3px 7px var(--shadow-color);
+}
+
+.practice h2,
+.completed h2,
+.completed h4 {
+  color: var(--text-color);
+}
+.InputContainer,
+.input {
+  color: #01aeff;
+  background-color: #324154;
+}
+body,
+.card,
+.dashboard,
+.main,
+#taskBtn {
+  transition: background var(--transition), color var(--transition),
+    border-color var(--transition), box-shadow var(--transition);
+}
