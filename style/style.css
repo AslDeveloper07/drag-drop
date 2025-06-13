@@ -68,7 +68,7 @@ body {
   color: var(--color-dark-gray);
 }
 .list.over {
-  background-color: var(--color-light-cyan);
+  /* background-color: var(--color-light-cyan); */
   border: 1px dashed var(--color-hover-blue);
 }
 .username {
@@ -276,12 +276,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgb(255, 255, 255);
+  background-color: #ffffff;
   border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
   padding-left: 15px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.075);
+  transition: background 0.3s ease;
 }
 
 .input {
@@ -291,6 +292,9 @@ body {
   outline: none;
   font-size: 0.9em;
   caret-color: #01aeff;
+  background-color: #ffffff;
+  color: #333;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 .labelforsearch {
@@ -502,6 +506,20 @@ body {
   --scroll-bg: #324154;
 }
 
+[data-theme="dark"] .InputContainer {
+  background-color: #324154 !important;
+}
+
+[data-theme="dark"] .input {
+  background-color: #324154 !important;
+  color: #e0e0e0 !important;
+}
+
+[data-theme="dark"] .input::placeholder {
+  color: #a0a0a0;
+}
+
+
 body {
   background: var(--primary-bg);
   color: var(--text-color);
@@ -537,11 +555,13 @@ body {
 }
 
 #list2,
-#list3 {
+#list3{
   background-color: var(--scroll-bg);
 }
 
-.name {
+.name,
+.members p,
+.date {
   color: var(--text-color);
 }
 
@@ -557,11 +577,7 @@ body {
 .completed h4 {
   color: var(--text-color);
 }
-.InputContainer,
-.input {
-  color: #01aeff;
-  background-color: #324154;
-}
+
 body,
 .card,
 .dashboard,
