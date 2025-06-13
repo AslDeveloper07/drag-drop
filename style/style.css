@@ -101,7 +101,6 @@ body {
   position: relative;
   padding: 2px;
   gap: 12px;
-  /* text-align: center; */
   overflow: auto;
   -ms-overflow-style: none;
 }
