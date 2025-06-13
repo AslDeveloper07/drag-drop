@@ -200,7 +200,7 @@ const tasks = [
     assignee: "Chris Taylor",
   },
 ];
-// DOM Elements
+
 const logOutBtn = document.getElementById("logOutBtn");
 const addTaskBtn = document.getElementById("taskBtn");
 const hourWatch = document.getElementById("hour");
@@ -208,150 +208,80 @@ const minuteWatch = document.getElementById("minute");
 const localDate = document.getElementById("date");
 const searchInput = document.getElementById("input");
 const complaterWork = document.getElementById("complated");
-const workCards = document.querySelectorAll(".work");
-const practice_work = document.querySelector(".practice_work");
-const done_work = document.querySelector(".done");
-const tasking = document.querySelector(".tasks");
 
-// Set current date
-function updateDate() {
-    const now = new Date();
-    const options = { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' };
-    localDate.textContent = now.toLocaleDateString('en-US', options);
+// ============= ***** Vaqt ishlashi ***** =============
+
+function updateClock() {
+  const now = new Date();
+
+  let hours = now.getHours();
+  let minutes = now.getMinutes();
+
+  hours = hours < 10 ? "0" + hours : hours;
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+
+  hourWatch.textContent = hours;
+  minuteWatch.textContent = minutes;
+
+  const options = {
+    //   weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  };
+  localDate.textContent = now.toLocaleString("en-US", options);
 }
-updateDate();
 
-// Update time
-function updateTime() {
-    const now = new Date();
-    hourWatch.textContent = now.getHours().toString().padStart(2, '0');
-    minuteWatch.textContent = now.getMinutes().toString().padStart(2, '0');
-}
-setInterval(updateTime, 1000);
-updateTime();
+updateClock();
+setInterval(updateClock, 1000);
 
-// Drag and Drop functionality
-workCards.forEach(card => {
+// ======================== ***** Drag & Drop funksionalligi ***** ========================
+
+const cards = document.querySelectorAll(".card");
+const lists = document.querySelectorAll(".list");
+
+for (const card of cards) {
     card.addEventListener("dragstart", dragStart);
     card.addEventListener("dragend", dragEnd);
-});
+  }
 
-[practice_work, done_work].forEach(zone => {
-    zone.addEventListener("dragover", dragOver);
-    zone.addEventListener("dragenter", dragEnter);
-    zone.addEventListener("dragleave", dragLeave);
-    zone.addEventListener("drop", dragDrop);
-});
+
+for (const list of lists) {
+  list.addEventListener("dragover", dragOver);
+  list.addEventListener("dragenter", dragEnter);
+  list.addEventListener("dragleave", dragLeave);
+  list.addEventListener("drop", dragDrop);
+}
 
 function dragStart(e) {
-    e.dataTransfer.setData("text/plain", e.target.id);
-    setTimeout(() => {
-        e.target.classList.add("dragging");
-    }, 0);
+  console.log("Sudrab olish boshlandi", this.id);
+  e.dataTransfer.setData("text/plain", this.id);
 }
 
 function dragEnd(e) {
-    e.target.classList.remove("dragging");
+  console.log("Sudrab olish tugadi", this.id);
 }
 
 function dragOver(e) {
-    e.preventDefault();
+  e.preventDefault();
+  console.log("Ruyxat element ustida", this.id || this.className);
 }
 
 function dragEnter(e) {
-    e.preventDefault();
-    this.classList.add("drag-over");
+  e.preventDefault();
+  this.classList.add("over");
 }
 
-function dragLeave() {
-    this.classList.remove("drag-over");
+function dragLeave(e) {
+  this.classList.remove("over");
 }
 
 function dragDrop(e) {
-    e.preventDefault();
-    this.classList.remove("drag-over");
-
-    const id = e.dataTransfer.getData("text/plain");
-    const draggable = document.getElementById(id);
-
-    // Check if we're moving to done zone to update completed count
-    if (this.classList.contains("done")) {
-        const currentCompleted = parseInt(complaterWork.textContent) || 0;
-        complaterWork.textContent = currentCompleted + 1;
-
-        // Extract time from the task (assuming format like "4 hours")
-        const timeText = draggable.querySelector("p:nth-child(2)")?.textContent || "";
-        const hoursMatch = timeText.match(/\d+/);
-        if (hoursMatch) {
-            const hoursToAdd = parseInt(hoursMatch[0]);
-            const currentHour = parseInt(hourWatch.textContent) || 0;
-            const currentMinute = parseInt(minuteWatch.textContent) || 0;
-
-
-            hourWatch.textContent = (currentHour + hoursToAdd).toString().padStart(2, '0');
-        }
-    }
-
-    this.appendChild(draggable);
+  e.preventDefault();
+  const id = e.dataTransfer.getData("text/plain");
+  const card= document.getElementById(id)
+  this.appendChild(card)
+  this.classList.remove("over");
 }
-
-// Add task functionality
-addTaskBtn.addEventListener("click", () => {
-    const taskTitle = prompt("Enter task title:");
-    if (taskTitle) {
-        const taskTime = prompt("Estimated time (e.g., '2 hours'):");
-        const taskPrice = prompt("Price (e.g., '$50'):");
-        const taskCompany = prompt("Company:");
-        const taskAssignee = prompt("Assignee:");
-
-        const newTask = document.createElement("div");
-        newTask.className = "work";
-        newTask.draggable = true;
-        newTask.id = "card" + (document.querySelectorAll(".work").length + 1);
-
-        newTask.innerHTML = `
-            <h3>${taskTitle}</h3>
-            ${taskTime ? `<p><strong>Time:</strong> ${taskTime}</p>` : ''}
-            ${taskPrice ? `<p><strong>Price:</strong> ${taskPrice}</p>` : ''}
-            ${taskCompany ? `<p><strong>Company:</strong> ${taskCompany}</p>` : ''}
-            ${taskAssignee ? `<p><strong>Assignee:</strong> ${taskAssignee}</p>` : ''}
-        `;
-
-        newTask.addEventListener("dragstart", dragStart);
-        newTask.addEventListener("dragend", dragEnd);
-
-        document.querySelector(".tasks").appendChild(newTask);
-    }
-});
-
-// Logout functionality
-logOutBtn.addEventListener("click", () => {
-    if (confirm("Are you sure you want to logout?")) {
-        // In a real app, you would redirect to logout page
-        alert("Logged out successfully");
-    }
-});
-
-// Search functionality
-searchInput.addEventListener("input", (e) => {
-    const searchTerm = e.target.value.toLowerCase();
-    document.querySelectorAll(".work").forEach(task => {
-        const taskText = task.textContent.toLowerCase();
-        task.style.display = taskText.includes(searchTerm) ? "block" : "none";
-    });
-});
-
-// Add some basic styling for drag and drop
-document.head.insertAdjacentHTML("beforeend", `
-    <style>
-        .dragging {
-            opacity: 0.5;
-            background-color: #f0f0f0;
-        }
-        .drag-over {
-            background-color:rgba(205, 249, 255, 0.12);
-            border: 1px dashed #26c6da;
-        }
-
-    </style>
-`);
