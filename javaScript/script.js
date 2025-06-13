@@ -211,6 +211,7 @@ const complaterWork = document.getElementById("complated");
 const workCards = document.querySelectorAll(".work");
 const practice_work = document.querySelector(".practice_work");
 const done_work = document.querySelector(".done");
+const tasking = document.querySelector(".tasks");
 
 // Set current date
 function updateDate() {
