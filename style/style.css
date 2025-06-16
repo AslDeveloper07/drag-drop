@@ -41,7 +41,7 @@
 }
 body {
   display: flex;
-  overflow-y: hidden;
+  overflow-x: hidden;
 }
 .dashboard {
   width: 20%;

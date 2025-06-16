@@ -1,629 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ProManage - Advanced Project Management</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
-                            200: '#bae6fd',
-                            300: '#7dd3fc',
-                            400: '#38bdf8',
-                            500: '#0ea5e9',
-                            600: '#0284c7',
-                            700: '#0369a1',
-                            800: '#075985',
-                            900: '#0c4a6e',
-                            950: '#082f49',
-                        },
-                        secondary: {
-                            500: '#8b5cf6',
-                            600: '#7c3aed',
-                        }
-                    },
-                    boxShadow: {
-                        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-                        'card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        .drag-handle {
-            cursor: grab;
-            opacity: 0.5;
-            transition: opacity 0.2s;
-        }
-        .drag-handle:hover {
-            opacity: 1;
-        }
-        .drag-handle:active {
-            cursor: grabbing;
-        }
-        .kanban-column {
-            min-height: 500px;
-            transition: background-color 0.3s;
-        }
-        .kanban-card {
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .kanban-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
-        }
-        .kanban-card.dragging {
-            opacity: 0.5;
-            transform: rotate(3deg);
-        }
-        .kanban-column.drag-over {
-            background-color: rgba(59, 130, 246, 0.1);
-        }
-        .priority-high {
-            border-left: 4px solid #ef4444;
-        }
-        .priority-medium {
-            border-left: 4px solid #f59e0b;
-        }
-        .priority-low {
-            border-left: 4px solid #10b981;
-        }
-        .avatar-group {
-            display: flex;
-        }
-        .avatar {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            border: 2px solid white;
-            margin-left: -8px;
-            background-color: #e2e8f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
-            color: #64748b;
-        }
-        .avatar:first-child {
-            margin-left: 0;
-        }
-        .progress-bar {
-            height: 6px;
-            border-radius: 3px;
-            overflow: hidden;
-            background-color: #e2e8f0;
-        }
-        .progress-fill {
-            height: 100%;
-            background-color: #3b82f6;
-            transition: width 0.5s ease;
-        }
-        [data-color="blue"] {
-            background-color: #3b82f6;
-        }
-        [data-color="purple"] {
-            background-color: #8b5cf6;
-        }
-        [data-color="red"] {
-            background-color: #ef4444;
-        }
-        [data-color="green"] {
-            background-color: #10b981;
-        }
-        [data-color="yellow"] {
-            background-color: #f59e0b;
-        }
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-        .dark .custom-scrollbar::-webkit-scrollbar-track {
-            background: #334155;
-        }
-        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #475569;
-        }
-        .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #64748b;
-        }
-    </style>
+    <title>Sfera Academy</title>
+    <link rel="stylesheet" href="./style/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css"
+        integrity="sha512-kJlvECunwXftkPwyvHbclArO8wszgBGisiLeuDFwNM8ws+wKIw0sv1os3ClWZOcrEB2eRXULYUsm8OVRGJKwGA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="shortcut icon" href="./resource/img/favicon.ico" type="image/x-icon">
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-200">
-    <div class="flex h-screen overflow-hidden">
-        <!-- Sidebar -->
-        <div class="w-64 bg-white dark:bg-gray-800 shadow-md flex flex-col border-r border-gray-200 dark:border-gray-700">
-            <!-- Logo -->
-            <div class="p-4 border-b border-gray-200 dark:border-gray-700">
-                <div class="flex items-center space-x-2">
-                    <div class="w-8 h-8 rounded-lg bg-primary-600 flex items-center justify-center">
-                        <i class="ri-stack-line text-white"></i>
-                    </div>
-                    <span class="text-xl font-bold">ProManage</span>
+
+<body>
+    <div class="dashboard">
+        <div class="Company">
+            <img src="./resource/svg/sferalightlogo.webp" alt="logo" class="logo">
+        </div>
+        <div class="list" id="list1">
+            <div class="card" id="card1" draggable="true">Build Login Page</div>
+            <div class="card" id="card2" draggable="true">Fix UI Bugs</div>
+            <div class="card" id="card3" draggable="true">Optimize Performance</div>
+            <div class="card" id="card4" draggable="true">Redesign Dashboard</div>
+            <div class="card" id="card5" draggable="true">Add Dark Mode</div>
+            <div class="card" id="card6" draggable="true">Create Mobile Menu</div>
+            <div class="card" id="card7" draggable="true">Update Form Validation</div>
+            <div class="card" id="card8" draggable="true">Ensure consistent rendering</div>
+            <div class="card" id="card9" draggable="true">Create User Profile</div>
+            <div class="card" id="card10" draggable="true">Optimize SEO Metadata</div>
+            <div class="card" id="card11" draggable="true">Refactor CSS Code</div>
+            <div class="card" id="card12" draggable="true">Build FAQ Section</div>
+            <div class="card" id="card13" draggable="true">Create Mobile Menu</div>
+            <div class="card" id="card14" draggable="true">Update Form Validation</div>
+            <div class="card" id="card15" draggable="true">Ensure consistent rendering</div>
+            <div class="card" id="card16" draggable="true">Create User Profile</div>
+            <div class="card" id="card17" draggable="true">Optimize SEO Metadata</div>
+            <div class="card" id="card18" draggable="true">Refactor CSS Code</div>
+            <div class="card" id="card20" draggable="true">Build FAQ Section</div>
+
+
+        </div>
+        <div class="profile">
+            <div class="name">
+                <div class="image">
+                    <img src="./resource/img/image.png" alt="" class="profilImage">
+                </div>
+                <div class="user">
+                    <h3 class="firstName">Asilbek</h3>
+                    <p class="username">@Knyaz</p>
                 </div>
             </div>
 
-            <!-- Navigation -->
-            <nav class="flex-1 p-4 overflow-y-auto custom-scrollbar">
-                <div class="space-y-1">
-                    <a href="#" class="flex items-center space-x-3 p-2 rounded-lg bg-primary-50 dark:bg-gray-700 text-primary-600 dark:text-primary-400 font-medium">
-                        <i class="ri-dashboard-line"></i>
-                        <span>Dashboard</span>
-                    </a>
-                    <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <i class="ri-task-line"></i>
-                        <span>My Tasks</span>
-                    </a>
-                    <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <i class="ri-team-line"></i>
-                        <span>Team</span>
-                    </a>
-                    <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <i class="ri-calendar-line"></i>
-                        <span>Calendar</span>
-                    </a>
-                    <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <i class="ri-file-chart-line"></i>
-                        <span>Reports</span>
-                    </a>
-                    <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <i class="ri-settings-3-line"></i>
-                        <span>Settings</span>
-                    </a>
-                </div>
+            <i class="ri-logout-circle-r-line" id="logOutBtn"></i>
 
-                <!-- Projects -->
-                <div class="mt-8">
-                    <div class="flex items-center justify-between mb-2">
-                        <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Projects</h3>
-                        <button class="text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300">
-                            <i class="ri-add-line"></i>
+        </div>
+    </div>
+    <div class="main">
+        <div class="header">
+            <div class="navbar">
+                <div class="team_date">
+                    <div class="members">
+                        <i class="ri-user-community-fill"></i>
+                        <p>12 Members</p>
+                    </div>
+                    <div class="date">
+                        <i class="ri-calendar-todo-fill"></i>
+                        <p id="date"></p>
+                    </div>
+                </div>
+                <div class="search_bell_dark">
+                    <!-- From Uiverse.io by vinodjangid07 -->
+                    <div class="InputContainer">
+                        <input type="text" name="text" class="input" id="input" placeholder="Search">
+
+                        <label for="input" class="labelforsearch">
+                            <svg viewBox="0 0 512 512" class="searchIcon">
+                                <path
+                                    d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z">
+                                </path>
+                            </svg>
+                        </label>
+                        <div class="border"></div>
+
+                        <button class="micButton"><svg viewBox="0 0 384 512" class="micIcon">
+                                <path
+                                    d="M192 0C139 0 96 43 96 96V256c0 53 43 96 96 96s96-43 96-96V96c0-53-43-96-96-96zM64 216c0-13.3-10.7-24-24-24s-24 10.7-24 24v40c0 89.1 66.2 162.7 152 174.4V464H120c-13.3 0-24 10.7-24 24s10.7 24 24 24h72 72c13.3 0 24-10.7 24-24s-10.7-24-24-24H216V430.4c85.8-11.7 152-85.3 152-174.4V216c0-13.3-10.7-24-24-24s-24 10.7-24 24v40c0 70.7-57.3 128-128 128s-128-57.3-128-128V216z">
+                                </path>
+                            </svg>
                         </button>
-                    </div>
-                    <div class="space-y-1">
-                        <a href="#" class="flex items-center space-x-3 p-2 rounded-lg bg-primary-50 dark:bg-gray-700 text-primary-600 dark:text-primary-400">
-                            <span class="w-2 h-2 rounded-full bg-primary-600"></span>
-                            <span>Website Redesign</span>
-                        </a>
-                        <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <span class="w-2 h-2 rounded-full bg-purple-500"></span>
-                            <span>Mobile App</span>
-                        </a>
-                        <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <span class="w-2 h-2 rounded-full bg-green-500"></span>
-                            <span>Marketing Campaign</span>
-                        </a>
-                        <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
-                            <span>Product Launch</span>
-                        </a>
-                    </div>
-                </div>
 
-                <!-- Teams -->
-                <div class="mt-8">
-                    <div class="flex items-center justify-between mb-2">
-                        <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Teams</h3>
-                        <button class="text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300">
-                            <i class="ri-add-line"></i>
-                        </button>
                     </div>
-                    <div class="space-y-1">
-                        <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <div class="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-300 text-xs font-bold">D</div>
-                            <span>Design</span>
-                        </a>
-                        <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <div class="w-6 h-6 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center text-purple-600 dark:text-purple-300 text-xs font-bold">D</div>
-                            <span>Development</span>
-                        </a>
-                        <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <div class="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center text-green-600 dark:text-green-300 text-xs font-bold">M</div>
-                            <span>Marketing</span>
-                        </a>
-                    </div>
-                </div>
-            </nav>
 
-            <!-- User Profile -->
-            <div class="p-4 border-t border-gray-200 dark:border-gray-700">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-600 dark:text-primary-300 font-bold">JD</div>
-                    <div class="flex-1">
-                        <div class="font-medium">John Doe</div>
-                        <div class="text-sm text-gray-500 dark:text-gray-400">Admin</div>
-                    </div>
-                    <button class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
-                        <i class="ri-logout-circle-r-line"></i>
-                    </button>
+
+                    <label class="notifcation">
+                        <input type="checkbox" checked="checked">
+                        <svg class="bell-regular" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                            <path
+                                d="M224 0c-17.7 0-32 14.3-32 32V49.9C119.5 61.4 64 124.2 64 200v33.4c0 45.4-15.5 89.5-43.8 124.9L5.3 377c-5.8 7.2-6.9 17.1-2.9 25.4S14.8 416 24 416H424c9.2 0 17.6-5.3 21.6-13.6s2.9-18.2-2.9-25.4l-14.9-18.6C399.5 322.9 384 278.8 384 233.4V200c0-75.8-55.5-138.6-128-150.1V32c0-17.7-14.3-32-32-32zm0 96h8c57.4 0 104 46.6 104 104v33.4c0 47.9 13.9 94.6 39.7 134.6H72.3C98.1 328 112 281.3 112 233.4V200c0-57.4 46.6-104 104-104h8zm64 352H224 160c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7s18.7-28.3 18.7-45.3z">
+                            </path>
+                        </svg>
+                        <svg class="bell-solid" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                            <path
+                                d="M224 0c-17.7 0-32 14.3-32 32V51.2C119 66 64 130.6 64 208v18.8c0 47-17.3 92.4-48.5 127.6l-7.4 8.3c-8.4 9.4-10.4 22.9-5.3 34.4S19.4 416 32 416H416c12.6 0 24-7.4 29.2-18.9s3.1-25-5.3-34.4l-7.4-8.3C401.3 319.2 384 273.9 384 226.8V208c0-77.4-55-142-128-156.8V32c0-17.7-14.3-32-32-32zm45.3 493.3c12-12 18.7-28.3 18.7-45.3H224 160c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7z">
+                            </path>
+                        </svg></label>
+
+
+                    <label for="themeToggle" class="themeToggle st-sunMoonThemeToggleBtn" type="checkbox">
+                        <input type="checkbox" id="themeToggle" class="themeToggleInput" />
+                        <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" stroke="none">
+                            <mask id="moon-mask">
+                                <rect x="0" y="0" width="20" height="20" fill="white"></rect>
+                                <circle cx="11" cy="3" r="8" fill="black"></circle>
+                            </mask>
+                            <circle class="sunMoon" cx="10" cy="10" r="8" mask="url(#moon-mask)"></circle>
+                            <g>
+                                <circle class="sunRay sunRay1" cx="18" cy="10" r="1.5"></circle>
+                                <circle class="sunRay sunRay2" cx="14" cy="16.928" r="1.5"></circle>
+                                <circle class="sunRay sunRay3" cx="6" cy="16.928" r="1.5"></circle>
+                                <circle class="sunRay sunRay4" cx="2" cy="10" r="1.5"></circle>
+                                <circle class="sunRay sunRay5" cx="6" cy="3.1718" r="1.5"></circle>
+                                <circle class="sunRay sunRay6" cx="14" cy="3.1718" r="1.5"></circle>
+                            </g>
+                        </svg>
+                    </label>
+                </div>
+            </div>
+            <div class="results">
+                <div class="progress">
+                    <h6>Tasks</h6>
+                    <p><span id="complated"></span>
+                        Complated</p>
+                </div>
+                <div class="addTask">
+                    <button id="taskBtn"> <i class="ri-add-fill"></i> Add Task</button>
                 </div>
             </div>
         </div>
+        <div class="Workers">
+            <div class="practice">
+                <h2>Work in practice</h2>
+                <div class="list" id="list2">
 
-        <!-- Main Content -->
-        <div class="flex-1 flex flex-col overflow-hidden">
-            <!-- Top Navigation -->
-            <header class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
-                <div class="flex items-center justify-between px-6 py-3">
-                    <div class="flex items-center space-x-4">
-                        <h1 class="text-xl font-semibold">Website Redesign</h1>
-                        <div class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
-                            <i class="ri-team-line"></i>
-                            <span>12 members</span>
-                        </div>
-                        <div class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
-                            <i class="ri-calendar-line"></i>
-                            <span>Due Jun 30, 2023</span>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center space-x-4">
-                        <button class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <i class="ri-search-line"></i>
-                        </button>
-                        <button class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <i class="ri-notification-3-line"></i>
-                        </button>
-                        <button id="themeToggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <i class="ri-sun-line dark:hidden"></i>
-                            <i class="ri-moon-line hidden dark:inline"></i>
-                        </button>
-                    </div>
-                </div>
-            </header>
-
-            <!-- Project Stats -->
-            <div class="bg-gray-100 dark:bg-gray-800 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-6">
-                        <div>
-                            <div class="text-sm text-gray-500 dark:text-gray-400">Progress</div>
-                            <div class="flex items-center space-x-2">
-                                <div class="w-48 progress-bar">
-                                    <div class="progress-fill" style="width: 65%"></div>
-                                </div>
-                                <span class="text-sm font-medium">65%</span>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="text-sm text-gray-500 dark:text-gray-400">Tasks</div>
-                            <div class="text-sm font-medium">42/78 completed</div>
-                        </div>
-                        <div>
-                            <div class="text-sm text-gray-500 dark:text-gray-400">Due Date</div>
-                            <div class="text-sm font-medium">Jun 30, 2023</div>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center space-x-3">
-                        <button class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 flex items-center space-x-2">
-                            <i class="ri-add-line"></i>
-                            <span>Add Task</span>
-                        </button>
-                        <button class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
-                            <i class="ri-more-2-line"></i>
-                        </button>
-                    </div>
                 </div>
             </div>
+            <div class="completed">
+                <h2>Done</h2>
+                <div class="list" id="list3">
 
-            <!-- Kanban Board -->
-            <div class="flex-1 overflow-x-auto overflow-y-hidden custom-scrollbar">
-                <div class="min-w-max h-full flex p-6 space-x-6">
-                    <!-- Backlog Column -->
-                    <div class="w-72 flex flex-col">
-                        <div class="flex items-center justify-between mb-4">
-                            <h2 class="font-semibold flex items-center space-x-2">
-                                <span class="w-3 h-3 rounded-full bg-gray-400"></span>
-                                <span>Backlog</span>
-                                <span class="text-sm text-gray-500 dark:text-gray-400">(12)</span>
-                            </h2>
-                            <button class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
-                                <i class="ri-more-2-line"></i>
-                            </button>
-                        </div>
+                </div>
+                <h4>Total time completed <span id="hour">00</span>: <span id="minute">00</span></h4>
+            </div>
+        </div>
+    </div>
+    <script src="./javaScript/script.js"></script>
+</body>
 
-                        <div class="kanban-column flex-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-3 space-y-3 overflow-y-auto custom-scrollbar" data-status="backlog">
-                            <!-- Task Cards -->
-                            <div class="kanban-card bg-white dark:bg-gray-700 rounded-lg shadow-card p-4 priority-high" draggable="true" data-id="1">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h3 class="font-medium">Design new homepage layout</h3>
-                                    <i class="ri-drag-move-2-line drag-handle text-gray-400"></i>
-                                </div>
-                                <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">Create wireframes and mockups for the new homepage design</p>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-2">
-                                        <span class="text-xs px-2 py-1 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 rounded-full">High</span>
-                                        <span class="text-xs px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full">Design</span>
-                                    </div>
-                                    <div class="avatar-group">
-                                        <div class="avatar" title="Sarah">S</div>
-                                        <div class="avatar" title="Mike">M</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="kanban-card bg-white dark:bg-gray-700 rounded-lg shadow-card p-4 priority-medium" draggable="true" data-id="2">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h3 class="font-medium">Research competitors</h3>
-                                    <i class="ri-drag-move-2-line drag-handle text-gray-400"></i>
-                                </div>
-                                <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">Analyze 5 competitor websites for design inspiration</p>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-2">
-                                        <span class="text-xs px-2 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded-full">Medium</span>
-                                        <span class="text-xs px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full">Research</span>
-                                    </div>
-                                    <div class="avatar-group">
-                                        <div class="avatar" title="Alex">A</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="kanban-card bg-white dark:bg-gray-700 rounded-lg shadow-card p-4 priority-low" draggable="true" data-id="3">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h3 class="font-medium">Set up project board</h3>
-                                    <i class="ri-drag-move-2-line drag-handle text-gray-400"></i>
-                                </div>
-                                <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">Configure all columns and automation rules</p>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-2">
-                                        <span class="text-xs px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full">Low</span>
-                                        <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-full">Setup</span>
-                                    </div>
-                                    <div class="avatar-group">
-                                        <div class="avatar" title="John">J</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="kanban-card bg-white dark:bg-gray-700 rounded-lg shadow-card p-4 priority-medium" draggable="true" data-id="4">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h3 class="font-medium">Create style guide</h3>
-                                    <i class="ri-drag-move-2-line drag-handle text-gray-400"></i>
-                                </div>
-                                <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">Document all colors, typography and UI components</p>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-2">
-                                        <span class="text-xs px-2 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded-full">Medium</span>
-                                        <span class="text-xs px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full">Design</span>
-                                    </div>
-                                    <div class="avatar-group">
-                                        <div class="avatar" title="Sarah">S</div>
-                                        <div class="avatar" title="Emma">E</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- To Do Column -->
-                    <div class="w-72 flex flex-col">
-                        <div class="flex items-center justify-between mb-4">
-                            <h2 class="font-semibold flex items-center space-x-2">
-                                <span class="w-3 h-3 rounded-full bg-blue-500"></span>
-                                <span>To Do</span>
-                                <span class="text-sm text-gray-500 dark:text-gray-400">(8)</span>
-                            </h2>
-                            <button class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
-                                <i class="ri-more-2-line"></i>
-                            </button>
-                        </div>
-
-                        <div class="kanban-column flex-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-3 space-y-3 overflow-y-auto custom-scrollbar" data-status="todo">
-                            <div class="kanban-card bg-white dark:bg-gray-700 rounded-lg shadow-card p-4 priority-high" draggable="true" data-id="5">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h3 class="font-medium">Develop homepage components</h3>
-                                    <i class="ri-drag-move-2-line drag-handle text-gray-400"></i>
-                                </div>
-                                <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">Implement the header, hero section and footer</p>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-2">
-                                        <span class="text-xs px-2 py-1 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 rounded-full">High</span>
-                                        <span class="text-xs px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full">Development</span>
-                                    </div>
-                                    <div class="avatar-group">
-                                        <div class="avatar" title="Mike">M</div>
-                                        <div class="avatar" title="David">D</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="kanban-card bg-white dark:bg-gray-700 rounded-lg shadow-card p-4 priority-medium" draggable="true" data-id="6">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h3 class="font-medium">Write content for about page</h3>
-                                    <i class="ri-drag-move-2-line drag-handle text-gray-400"></i>
-                                </div>
-                                <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">Draft company story and team bios</p>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-2">
-                                        <span class="text-xs px-2 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded-full">Medium</span>
-                                        <span class="text-xs px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full">Content</span>
-                                    </div>
-                                    <div class="avatar-group">
-                                        <div class="avatar" title="Lisa">L</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="kanban-card bg-white dark:bg-gray-700 rounded-lg shadow-card p-4 priority-low" draggable="true" data-id="7">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h3 class="font-medium">Set up analytics</h3>
-                                    <i class="ri-drag-move-2-line drag-handle text-gray-400"></i>
-                                </div>
-                                <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">Install Google Analytics and configure goals</p>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-2">
-                                        <span class="text-xs px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full">Low</span>
-                                        <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-full">Setup</span>
-                                    </div>
-                                    <div class="avatar-group">
-                                        <div class="avatar" title="John">J</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- In Progress Column -->
-                    <div class="w-72 flex flex-col">
-                        <div class="flex items-center justify-between mb-4">
-                            <h2 class="font-semibold flex items-center space-x-2">
-                                <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
-                                <span>In Progress</span>
-                                <span class="text-sm text-gray-500 dark:text-gray-400">(5)</span>
-                            </h2>
-                            <button class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
-                                <i class="ri-more-2-line"></i>
-                            </button>
-                        </div>
-
-                        <div class="kanban-column flex-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-3 space-y-3 overflow-y-auto custom-scrollbar" data-status="in-progress">
-                            <div class="kanban-card bg-white dark:bg-gray-700 rounded-lg shadow-card p-4 priority-high" draggable="true" data-id="8">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h3 class="font-medium">Product page redesign</h3>
-                                    <i class="ri-drag-move-2-line drag-handle text-gray-400"></i>
-                                </div>
-                                <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">New layout with improved product images and CTAs</p>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-2">
-                                        <span class="text-xs px-2 py-1 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 rounded-full">High</span>
-                                        <span class="text-xs px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full">Design</span>
-                                    </div>
-                                    <div class="avatar-group">
-                                        <div class="avatar" title="Sarah">S</div>
-                                        <div class="avatar" title="Emma">E</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="kanban-card bg-white dark:bg-gray-700 rounded-lg shadow-card p-4 priority-medium" draggable="true" data-id="9">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h3 class="font-medium">API integration</h3>
-                                    <i class="ri-drag-move-2-line drag-handle text-gray-400"></i>
-                                </div>
-                                <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">Connect frontend to the new product API</p>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-2">
-                                        <span class="text-xs px-2 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded-full">Medium</span>
-                                        <span class="text-xs px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full">Development</span>
-                                    </div>
-                                    <div class="avatar-group">
-                                        <div class="avatar" title="Mike">M</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="kanban-card bg-white dark:bg-gray-700 rounded-lg shadow-card p-4 priority-medium" draggable="true" data-id="10">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h3 class="font-medium">SEO optimization</h3>
-                                    <i class="ri-drag-move-2-line drag-handle text-gray-400"></i>
-                                </div>
-                                <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">Research and implement keywords for main pages</p>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-2">
-                                        <span class="text-xs px-2 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded-full">Medium</span>
-                                        <span class="text-xs px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full">Marketing</span>
-                                    </div>
-                                    <div class="avatar-group">
-                                        <div class="avatar" title="Alex">A</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Review Column -->
-                    <div class="w-72 flex flex-col">
-                        <div class="flex items-center justify-between mb-4">
-                            <h2 class="font-semibold flex items-center space-x-2">
-                                <span class="w-3 h-3 rounded-full bg-purple-500"></span>
-                                <span>Review</span>
-                                <span class="text-sm text-gray-500 dark:text-gray-400">(3)</span>
-                            </h2>
-                            <button class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
-                                <i class="ri-more-2-line"></i>
-                            </button>
-                        </div>
-
-                        <div class="kanban-column flex-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-3 space-y-3 overflow-y-auto custom-scrollbar" data-status="review">
-                            <div class="kanban-card bg-white dark:bg-gray-700 rounded-lg shadow-card p-4 priority-high" draggable="true" data-id="11">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h3 class="font-medium">Checkout process</h3>
-                                    <i class="ri-drag-move-2-line drag-handle text-gray-400"></i>
-                                </div>
-                                <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">Test and review the new checkout flow</p>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-2">
-                                        <span class="text-xs px-2 py-1 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 rounded-full">High</span>
-                                        <span class="text-xs px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full">Development</span>
-                                    </div>
-                                    <div class="avatar-group">
-                                        <div class="avatar" title="David">D</div>
-                                        <div class="avatar" title="Lisa">L</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="kanban-card bg-white dark:bg-gray-700 rounded-lg shadow-card p-4 priority-medium" draggable="true" data-id="12">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h3 class="font-medium">Blog post drafts</h3>
-                                    <i class="ri-drag-move-2-line drag-handle text-gray-400"></i>
-                                </div>
-                                <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">Review 3 new blog posts before publishing</p>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-2">
-                                        <span class="text-xs px-2 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded-full">Medium</span>
-                                        <span class="text-xs px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full">Content</span>
-                                    </div>
-                                    <div class="avatar-group">
-                                        <div class="avatar" title="Lisa">L</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Done Column -->
-                    <div class="w-72 flex flex-col">
-                        <div class="flex items-center justify-between mb-4">
-                            <h2 class="font-semibold flex items-center space-x-2">
-                                <span class="w-3 h-3 rounded-full bg-green-500"></span>
-                                <span>Done</span>
-                                <span class="text-sm text-gray-500 dark:text-gray-400">(14)</span>
-                            </h2>
-                            <button class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
-                                <i class="ri-more-2-line"></i>
-                            </button>
-                        </div>
-
-                        <div class="kanban-column flex-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-3 space-y-3 overflow-y-auto custom-scrollbar" data-status="done">
-                            <div class="kanban-card bg-white dark:bg-gray-700 rounded-lg shadow-card p-4 priority-medium opacity-70" draggable="true" data-id="13">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h3 class="font-medium line-through">Project kickoff meeting</h3>
-                                    <i class="ri-drag-move-2-line drag-handle text-gray-400"></i>
-                                </div>
-                                <p class="text-sm text-gray-600 dark:text-gray-300 mb-3 line-through">Align team on goals and timeline</p>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-2">
-                                        <span class="text-xs px-2 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded-full">Medium</span>
-                                        <span class="text-xs px-2 py-
+</html>
